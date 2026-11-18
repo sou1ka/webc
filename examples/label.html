@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>WebC Field Label</title>
+  <link rel="stylesheet" href="../src/webc.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    h3 { margin: 24px 0 8px; }
+
+    /* ---- ラベルを左に置く（cls: 'label-left'） ---- */
+    .webc-field.label-left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+    .webc-field-textarea.label-left { align-items: flex-start; }
+    .webc-field.label-left > .webc-field-label {
+      position: static;
+      flex: 0 0 6em;
+      font-size: 14px;
+    }
+    .webc-field.label-left > .webc-field-label + .webc-field-control { padding-top: 8px; }
+
+    /* ---- フローティングラベル（cls: 'label-float'、attrs: { placeholder: ' ' } が必要） ---- */
+    .webc-field.label-float > .webc-field-label {
+      top: 18px;
+      font-size: 16px;
+      transition: top .15s, font-size .15s, color .15s;
+    }
+    .webc-field.label-float:has(> .webc-field-control:focus) > .webc-field-label,
+    .webc-field.label-float:has(> .webc-field-control:not(:placeholder-shown)) > .webc-field-label {
+      top: 8px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <p>ラベルの配置は CSS だけで変えています（cls でクラスを付けて切替）。</p>
+
+  <form>
+    <h3>既定（上部に固定）</h3>
+    <div id="default-row"></div>
+
+    <h3>左に置く（cls: 'label-left'）</h3>
+    <div id="left-row"></div>
+
+    <h3>フローティング（cls: 'label-float'）</h3>
+    <p>空のときは中央、フォーカスするか値が入ると上へ移動します。</p>
+    <div id="float-row"></div>
+    <button type="button" id="set">setValue で値を入れる</button>
+    <button type="reset">リセット</button>
+  </form>
+
+  <script src="../src/webc.js"></script>
+  <script>
+    const { Input, TextArea } = WebC.field;
+
+    new Input({ renderTo: '#default-row', name: 'd1', label: '名前' });
+    new Input({ renderTo: '#default-row', name: 'd2', label: 'メール', type: 'email' });
+
+    new Input({ renderTo: '#left-row', cls: 'label-left', name: 'l1', label: '名前' });
+    new Input({ renderTo: '#left-row', cls: 'label-left', name: 'l2', label: 'メール', type: 'email' });
+    new TextArea({ renderTo: '#left-row', cls: 'label-left', name: 'l3', label: '備考' });
+
+    const float = { cls: 'label-float', attrs: { placeholder: ' ' } };
+    const name = new Input({ renderTo: '#float-row', ...float, name: 'f1', label: '名前' });
+    new Input({ renderTo: '#float-row', ...float, name: 'f2', label: '年齢', type: 'number' });
+    new Input({ renderTo: '#float-row', ...float, name: 'f3', label: '初期値あり', value: 'abc' });
+    new TextArea({ renderTo: '#float-row', ...float, name: 'f4', label: '備考' });
+
+    document.querySelector('#set').addEventListener('click', () => name.setValue('佐藤 一郎'));
+  </script>
+</body>
+</html>

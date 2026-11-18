@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>WebC Grid</title>
+  <link rel="stylesheet" href="../src/webc.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    .webc-grid { height: 360px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Local Store</h2>
+  <div id="local"></div>
+  <p>selection: <span id="local-out">-</span></p>
+
+  <h2>Remote Store（静的 JSON）</h2>
+  <div id="remote"></div>
+  <p>rowclick: <span id="remote-out">-</span></p>
+
+  <script src="../src/webc.js"></script>
+  <script>
+    const columns = [
+      { text: 'ID', dataIndex: 'id', width: 64 },
+      { text: '名前', dataIndex: 'name', width: 160 },
+      { text: '年齢', dataIndex: 'age', width: 80 },
+      { text: '部署', dataIndex: 'dept' },
+      { text: '操作', dataIndex: 'id', sortable: false, renderer: (id) => {
+          const a = document.createElement('a');
+          a.href = '#';
+          a.textContent = `詳細 #${id}`;
+          return a;
+      } },
+    ];
+
+    // ---- Local: data を直接渡す。ソート・ページングもローカル ----
+    const localGrid = new WebC.grid.Grid({
+      renderTo: '#local',
+      paging: true,
+      columns,
+      store: new WebC.data.Store({
+        pageSize: 5,
+        data: [
+          { id: 1, name: 'Carol', age: 30, dept: '開発' },
+          { id: 2, name: 'Alice', age: 25, dept: '営業' },
+          { id: 3, name: 'Bob', age: 35, dept: '総務' },
+          { id: 4, name: 'Dave', age: 41, dept: '開発' },
+          { id: 5, name: 'Eve', age: 22, dept: '人事' },
+          { id: 6, name: 'Frank', age: 38, dept: '営業' },
+          { id: 7, name: 'Grace', age: 29, dept: '開発' },
+        ],
+      }),
+    });
+    localGrid.on('selectionchange', (e) => {
+      document.querySelector('#local-out').textContent = e.detail.record ? e.detail.record.name : '-';
+    });
+
+    // ---- Remote: 静的 JSON を取得。サーバ側で並べ替えできないのでソート・ページングはローカル ----
+    const remoteStore = new WebC.data.Store({
+      url: 'data/users.json',
+      rootProperty: 'items',
+      pageSize: 10,
+    });
+    const remoteGrid = new WebC.grid.Grid({
+      renderTo: '#remote',
+      paging: true,
+      columns,
+      store: remoteStore,
+    });
+    remoteGrid.on('rowclick', (e) => {
+      document.querySelector('#remote-out').textContent = `${e.detail.index}: ${e.detail.record.name}`;
+    });
+    remoteStore.load().catch((e) => console.error('load failed', e));
+  </script>
+</body>
+</html>

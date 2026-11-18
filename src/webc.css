@@ -1,0 +1,679 @@
+/*
+ * WebC デフォルトテーマ（Material Design 3 / Filled）
+ * 色は .webc-dropdown 上の変数を上書きして変更できる。
+ */
+
+.webc-dropdown {
+  --webc-primary: #6750a4;
+  --webc-on-surface: #1d1b20;
+  --webc-on-surface-variant: #49454f;
+  --webc-surface-container: #f3edf7;
+  --webc-surface-container-highest: #e6e0e9;
+  --webc-secondary-container: #e8def8;
+
+  display: inline-block;
+  min-width: 210px;
+  font-family: Roboto, system-ui, sans-serif;
+}
+
+.webc-dropdown-select,
+.webc-dropdown-select::picker(select) {
+  appearance: base-select;
+}
+
+.webc-dropdown-select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 56px;
+  padding: 0 12px 0 16px;
+  border: none;
+  border-bottom: 1px solid var(--webc-on-surface-variant);
+  border-radius: 4px 4px 0 0;
+  background: var(--webc-surface-container-highest);
+  color: var(--webc-on-surface);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.webc-dropdown-select:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, var(--webc-surface-container-highest));
+}
+
+.webc-dropdown-select:focus-visible,
+.webc-dropdown-select:open {
+  outline: none;
+  border-bottom: 2px solid var(--webc-primary);
+}
+
+.webc-dropdown-select::picker-icon {
+  color: var(--webc-on-surface-variant);
+  transition: rotate 0.2s;
+}
+
+.webc-dropdown-select:open::picker-icon {
+  rotate: 180deg;
+}
+
+.webc-dropdown-select::picker(select) {
+  margin-top: 2px;
+  padding: 8px 0;
+  border: none;
+  border-radius: 4px;
+  background: var(--webc-surface-container);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 2px 6px 2px rgb(0 0 0 / 0.15);
+}
+
+.webc-dropdown-option {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 12px;
+  color: var(--webc-on-surface);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.webc-dropdown-option:hover,
+.webc-dropdown-option:focus-visible {
+  outline: none;
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.webc-dropdown-option:checked {
+  background: var(--webc-secondary-container);
+}
+
+.webc-dropdown-option::checkmark {
+  display: none;
+}
+
+/* ---- Grid（Material Design 3 / Data table 風） ---- */
+
+.webc-grid {
+  --webc-primary: #6750a4;
+  --webc-on-surface: #1d1b20;
+  --webc-on-surface-variant: #49454f;
+  --webc-surface: #fef7ff;
+  --webc-outline-variant: #cac4d0;
+  --webc-secondary-container: #e8def8;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--webc-outline-variant);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--webc-surface);
+  color: var(--webc-on-surface);
+  font-family: Roboto, system-ui, sans-serif;
+  font-size: 14px;
+}
+
+.webc-grid-body {
+  flex: 1;
+  overflow: auto;
+}
+
+.webc-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.webc-grid-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 56px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--webc-outline-variant);
+  background: var(--webc-surface);
+  color: var(--webc-on-surface-variant);
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.webc-grid-header.is-sortable {
+  cursor: pointer;
+}
+
+.webc-grid-header.is-sortable:hover {
+  color: var(--webc-on-surface);
+}
+
+.webc-grid-header.is-sort-asc::after,
+.webc-grid-header.is-sort-desc::after {
+  margin-left: 4px;
+  color: var(--webc-primary);
+}
+
+.webc-grid-header.is-sort-asc::after {
+  content: '\2191';
+}
+
+.webc-grid-header.is-sort-desc::after {
+  content: '\2193';
+}
+
+.webc-grid-row {
+  cursor: pointer;
+}
+
+.webc-grid-row:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.webc-grid-row.is-selected {
+  background: var(--webc-secondary-container);
+}
+
+.webc-grid-cell {
+  height: 52px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--webc-outline-variant);
+}
+
+.webc-grid-empty {
+  padding: 24px 16px;
+  color: var(--webc-on-surface-variant);
+  text-align: center;
+}
+
+.webc-grid-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--webc-surface) 70%, transparent);
+  color: var(--webc-primary);
+}
+
+.webc-grid-empty[hidden],
+.webc-grid-loading[hidden] {
+  display: none;
+}
+
+.webc-grid-paging {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  height: 52px;
+  padding: 0 8px;
+  border-top: 1px solid var(--webc-outline-variant);
+  color: var(--webc-on-surface-variant);
+}
+
+.webc-grid-paging button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--webc-on-surface-variant);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.webc-grid-paging button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.webc-grid-paging button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.webc-grid-paging-info {
+  margin: 0 8px;
+}
+
+/* ---- TabPanel（Material Design 3 / Tabs・Navigation rail・Navigation drawer 風） ---- */
+
+.webc-tabpanel {
+  --webc-primary: #6750a4;
+  --webc-on-surface: #1d1b20;
+  --webc-on-surface-variant: #49454f;
+  --webc-surface: #fef7ff;
+  --webc-surface-container: #f3edf7;
+  --webc-surface-container-low: #f7f2fa;
+  --webc-outline-variant: #cac4d0;
+  --webc-secondary-container: #e8def8;
+  --webc-on-secondary-container: #1d192b;
+
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background: var(--webc-surface);
+  color: var(--webc-on-surface);
+  font-family: Roboto, system-ui, sans-serif;
+}
+
+.webc-tabpanel.is-pos-top { flex-direction: column; }
+.webc-tabpanel.is-pos-bottom { flex-direction: column-reverse; }
+.webc-tabpanel.is-pos-left { flex-direction: row; }
+.webc-tabpanel.is-pos-right { flex-direction: row-reverse; }
+
+.webc-tabpanel-body {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.webc-tabpanel-content[hidden] {
+  display: none;
+}
+
+.webc-tabpanel-menu,
+.webc-tabpanel-backdrop {
+  display: none;
+}
+
+/* ナビゲーション */
+
+.webc-tabpanel-nav {
+  display: flex;
+  background: var(--webc-surface-container);
+}
+
+.is-pos-top > .webc-tabpanel-nav { border-bottom: 1px solid var(--webc-outline-variant); }
+.is-pos-bottom > .webc-tabpanel-nav { border-top: 1px solid var(--webc-outline-variant); }
+
+.is-pos-left > .webc-tabpanel-nav,
+.is-pos-right > .webc-tabpanel-nav {
+  flex-direction: column;
+  gap: 4px;
+  width: 220px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.webc-tabpanel-tab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  background: transparent;
+  color: var(--webc-on-surface-variant);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.webc-tabpanel-tab:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.webc-tabpanel-icon {
+  display: inline-flex;
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* 上下: Tabs */
+.is-pos-top:not(.is-drawer) .webc-tabpanel-tab,
+.is-pos-bottom:not(.is-drawer) .webc-tabpanel-tab {
+  height: 48px;
+  padding: 0 16px;
+}
+
+.is-pos-top:not(.is-drawer) .webc-tabpanel-tab.is-active {
+  color: var(--webc-primary);
+  box-shadow: inset 0 -3px 0 var(--webc-primary);
+}
+
+.is-pos-bottom:not(.is-drawer) .webc-tabpanel-tab.is-active {
+  color: var(--webc-primary);
+  box-shadow: inset 0 3px 0 var(--webc-primary);
+}
+
+/* 左右・ドロワー: Navigation rail / drawer */
+.is-pos-left .webc-tabpanel-tab,
+.is-pos-right .webc-tabpanel-tab,
+.is-drawer .webc-tabpanel-tab {
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 28px;
+}
+
+.is-pos-left .webc-tabpanel-tab.is-active,
+.is-pos-right .webc-tabpanel-tab.is-active,
+.is-drawer .webc-tabpanel-tab.is-active {
+  background: var(--webc-secondary-container);
+  color: var(--webc-on-secondary-container);
+}
+
+/* アイコンのみ: アイコンを持つタブだけラベルを隠す */
+.is-icon-only .webc-tabpanel-tab:has(.webc-tabpanel-icon) .webc-tabpanel-text {
+  display: none;
+}
+
+.is-icon-only.is-pos-left > .webc-tabpanel-nav,
+.is-icon-only.is-pos-right > .webc-tabpanel-nav {
+  width: auto;
+  align-items: center;
+}
+
+/* ドロワー */
+.webc-tabpanel.is-drawer { flex-direction: column; }
+.webc-tabpanel.is-drawer.is-pos-bottom { flex-direction: column-reverse; }
+
+.is-drawer > .webc-tabpanel-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 48px;
+  height: 48px;
+  margin: 4px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--webc-on-surface-variant);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.is-drawer.is-pos-right > .webc-tabpanel-menu { align-self: flex-end; }
+
+.is-drawer > .webc-tabpanel-menu::before {
+  content: '\2630';
+}
+
+.is-drawer > .webc-tabpanel-menu:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.is-drawer > .webc-tabpanel-nav {
+  position: absolute;
+  z-index: 3;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: none;
+  background: var(--webc-surface-container-low);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3), 0 4px 8px 3px rgb(0 0 0 / 0.15);
+  visibility: hidden;
+  transition: transform 0.25s, visibility 0.25s;
+}
+
+.is-drawer.is-pos-left > .webc-tabpanel-nav { top: 0; bottom: 0; left: 0; width: 280px; max-width: 80%; transform: translateX(-100%); }
+.is-drawer.is-pos-right > .webc-tabpanel-nav { top: 0; bottom: 0; right: 0; width: 280px; max-width: 80%; transform: translateX(100%); }
+.is-drawer.is-pos-top > .webc-tabpanel-nav { top: 0; left: 0; right: 0; transform: translateY(-100%); }
+.is-drawer.is-pos-bottom > .webc-tabpanel-nav { bottom: 0; left: 0; right: 0; transform: translateY(100%); }
+
+.is-drawer.is-drawer-open > .webc-tabpanel-nav {
+  visibility: visible;
+  transform: none;
+}
+
+.is-drawer.is-drawer-open > .webc-tabpanel-backdrop {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgb(0 0 0 / 0.32);
+}
+
+/* ---- Field（Material Design 3 / Filled text field・Checkbox・Radio 風） ---- */
+
+.webc-field {
+  --webc-primary: #6750a4;
+  --webc-on-surface: #1d1b20;
+  --webc-on-surface-variant: #49454f;
+  --webc-surface-container-highest: #e6e0e9;
+  --webc-error: #b3261e;
+
+  font-family: Roboto, system-ui, sans-serif;
+  color: var(--webc-on-surface);
+}
+
+/* テキスト系: ラベルを入力欄の上部（内側）に固定表示 */
+.webc-field-input,
+.webc-field-textarea {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 210px;
+  margin: 0 8px 16px 0;
+  vertical-align: top;
+}
+
+.webc-field-input > .webc-field-label,
+.webc-field-textarea > .webc-field-label {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  color: var(--webc-on-surface-variant);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.webc-field-input > .webc-field-control,
+.webc-field-textarea > .webc-field-control {
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 16px;
+  border: none;
+  border-bottom: 1px solid var(--webc-on-surface-variant);
+  border-radius: 4px 4px 0 0;
+  background: var(--webc-surface-container-highest);
+  color: var(--webc-on-surface);
+  font: inherit;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.webc-field-input > .webc-field-label + .webc-field-control,
+.webc-field-textarea > .webc-field-label + .webc-field-control {
+  padding-top: 26px;
+}
+
+.webc-field-textarea > .webc-field-control {
+  resize: vertical;
+}
+
+.webc-field-input > .webc-field-control:hover,
+.webc-field-textarea > .webc-field-control:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, var(--webc-surface-container-highest));
+}
+
+.webc-field-input > .webc-field-control:focus,
+.webc-field-textarea > .webc-field-control:focus {
+  outline: none;
+  border-bottom: 2px solid var(--webc-primary);
+}
+
+.webc-field-input:focus-within > .webc-field-label,
+.webc-field-textarea:focus-within > .webc-field-label {
+  color: var(--webc-primary);
+}
+
+.webc-field-input > .webc-field-control:user-invalid,
+.webc-field-textarea > .webc-field-control:user-invalid {
+  border-bottom-color: var(--webc-error);
+}
+
+/* DropDown のラベル */
+.webc-field-dropdown {
+  position: relative;
+  margin: 0 8px 16px 0;
+  vertical-align: top;
+}
+
+.webc-field-dropdown > .webc-field-label {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  z-index: 1;
+  color: var(--webc-on-surface-variant);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.webc-field-dropdown > .webc-field-label + .webc-dropdown-select {
+  padding-top: 18px;
+}
+
+/* チェックボックス・ラジオ */
+.webc-field-checkbox,
+.webc-field-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0 16px 8px 0;
+}
+
+.webc-field-checkbox > .webc-field-control,
+.webc-field-radio > .webc-field-control {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--webc-primary);
+  cursor: pointer;
+}
+
+.webc-field-checkbox > .webc-field-label,
+.webc-field-radio > .webc-field-label {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* スイッチ（Material Design 3 / Switch 風） */
+.webc-field-switch {
+  --webc-outline: #79747e;
+  --webc-on-primary: #ffffff;
+  --webc-surface-container-highest: #e6e0e9;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  margin: 0 16px 8px 0;
+}
+
+.webc-field-switch > .webc-field-control {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 52px;
+  height: 32px;
+  margin: 0;
+  border: 2px solid var(--webc-outline);
+  border-radius: 16px;
+  background: var(--webc-surface-container-highest);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.webc-field-switch > .webc-field-control::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--webc-outline);
+  transform: translateY(-50%);
+  transition: left 0.2s, width 0.2s, height 0.2s, background-color 0.2s;
+}
+
+.webc-field-switch > .webc-field-control:checked {
+  border-color: var(--webc-primary);
+  background: var(--webc-primary);
+}
+
+.webc-field-switch > .webc-field-control:checked::before {
+  left: 22px;
+  width: 24px;
+  height: 24px;
+  background: var(--webc-on-primary);
+}
+
+.webc-field-switch > .webc-field-control:focus-visible {
+  outline: 2px solid var(--webc-primary);
+  outline-offset: 2px;
+}
+
+.webc-field-switch > .webc-field-label {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* トグルボタン（Material Design 3 / Segmented button 風）。隣接するものは連結して表示 */
+.webc-field-togglebutton {
+  --webc-outline: #79747e;
+  --webc-secondary-container: #e8def8;
+  --webc-on-secondary-container: #1d192b;
+
+  position: relative;
+  display: inline-flex;
+  margin: 0 0 8px 0;
+}
+
+.webc-field-togglebutton > .webc-field-control {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.webc-field-togglebutton > .webc-field-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 48px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--webc-outline);
+  border-radius: 20px;
+  color: var(--webc-on-surface);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.webc-field-togglebutton:has(+ .webc-field-togglebutton) > .webc-field-label {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.webc-field-togglebutton + .webc-field-togglebutton > .webc-field-label {
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.webc-field-togglebutton > .webc-field-label:hover {
+  background: color-mix(in srgb, var(--webc-on-surface) 8%, transparent);
+}
+
+.webc-field-togglebutton > .webc-field-control:checked + .webc-field-label {
+  background: var(--webc-secondary-container);
+  color: var(--webc-on-secondary-container);
+}
+
+.webc-field-togglebutton > .webc-field-control:checked + .webc-field-label::before {
+  content: '\2713';
+  margin-right: 6px;
+}
+
+.webc-field-togglebutton > .webc-field-control:focus-visible + .webc-field-label {
+  outline: 2px solid var(--webc-primary);
+  outline-offset: 2px;
+}

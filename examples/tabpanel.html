@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>WebC TabPanel</title>
+  <link rel="stylesheet" href="../src/webc.css">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    /* 右下をドラッグして幅を変え、通常 → アイコンのみ → ドロワーの切替を確認する */
+    #frame {
+      width: 900px;
+      max-width: 100%;
+      min-width: 240px;
+      height: 400px;
+      resize: horizontal;
+      overflow: hidden;
+      border: 1px dashed #999;
+    }
+    #frame > .webc-tabpanel { height: 100%; }
+    .page { padding: 16px 24px; }
+  </style>
+</head>
+<body>
+  <p>
+    tabPosition:
+    <label><input type="radio" name="pos" value="top" checked> top</label>
+    <label><input type="radio" name="pos" value="bottom"> bottom</label>
+    <label><input type="radio" name="pos" value="left"> left</label>
+    <label><input type="radio" name="pos" value="right"> right</label>
+  </p>
+  <p>幅: <span id="width"></span>px（〜480: ドロワー / 〜768: アイコンのみ）／ tabchange: <span id="out">-</span></p>
+
+  <div id="frame"></div>
+
+  <script src="../src/webc.js"></script>
+  <script>
+    // content は TabPanel 内へ移動し destroy で一緒に消えるため、作り直す度に生成する
+    function page(title) {
+      const el = document.createElement('div');
+      el.className = 'page';
+      el.innerHTML = `<h2>${title}</h2><p>${title} のコンテンツです。</p>`;
+      return el;
+    }
+
+    // icon は文字列（textContent）と Node の両方を試す
+    function svgIcon() {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('width', '24');
+      svg.setAttribute('height', '24');
+      svg.innerHTML = '<path fill="currentColor" d="M12 2 2 7l10 5 10-5-10-5zm0 7.5L4.2 5.6 2 7l10 5 10-5-2.2-1.4L12 9.5zM2 12l10 5 10-5-2.2-1.1L12 14.8 4.2 10.9 2 12zm0 5 10 5 10-5-2.2-1.1L12 19.8l-7.8-3.9L2 17z"/>';
+      return svg;
+    }
+
+    let panel = null;
+
+    function build(tabPosition) {
+      const active = panel ? panel.getActive() : undefined;
+      if (panel) panel.destroy();
+      panel = new WebC.panel.TabPanel({
+        renderTo: '#frame',
+        tabPosition,
+        active,
+        iconOnlyWidth: 768,
+        drawerWidth: 480,
+        items: [
+          { id: 'home', text: 'ホーム', icon: '🏠', content: page('ホーム') },
+          { id: 'users', text: 'ユーザー', icon: '👥', content: page('ユーザー') },
+          { id: 'layers', text: 'レイヤー', icon: svgIcon(), content: page('レイヤー') },
+          { id: 'about', text: 'アイコン無し', content: page('アイコン無し') },
+        ],
+      });
+      panel.on('tabchange', (e) => {
+        document.querySelector('#out').textContent = `${e.detail.oldItem?.id} → ${e.detail.item.id}`;
+      });
+    }
+
+    document.querySelectorAll('input[name=pos]').forEach((radio) => {
+      radio.addEventListener('change', () => build(radio.value));
+    });
+
+    const frame = document.querySelector('#frame');
+    new ResizeObserver(() => {
+      document.querySelector('#width').textContent = Math.round(frame.clientWidth);
+    }).observe(frame);
+
+    build('top');
+  </script>
+</body>
+</html>
