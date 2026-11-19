@@ -49,12 +49,39 @@ WebC.Lib.defaults.headers = { Authorization: 'Bearer xxxxx' };
 
 ### エラー
 
-エラーは Promise の reject で通知されます。HTTP ステータスが 2xx 以外の場合は、`status` プロパティ付きの `Error`（メッセージは `HTTP 404` のような形式）で reject します。通信自体の失敗は `fetch` の例外がそのまま reject されます。
+エラーは Promise の reject で通知されます。HTTP ステータスが 2xx 以外の場合は、`status` と `body` プロパティ付きの `Error` で reject します。
+
+| プロパティ | 内容 |
+| --- | --- |
+| `message` | `HTTP 404` のような形式です。 |
+| `status` | HTTP ステータスコード（数値）です。 |
+| `body` | エラー時のレスポンス本文です。形式は `responseType` によって変わります（後述）。 |
+
+`body` の形式です。
+
+- `responseType: 'json'`（既定）: 本文を `JSON.parse` した値です。JSON として読めない場合（HTML のエラーページ、空文字など）は、本文の文字列がそのまま入ります。
+- `responseType: 'text'`: 文字列です。
+- `responseType: 'xml'`: `application/xml` として解析した `Document` です。
+
+通信自体の失敗（ネットワークエラーなど）では `fetch` の例外がそのまま reject されるため、`status` と `body` は付きません。
+
+`WebC.data.Store` の `load()` もこのエラーをそのまま reject します。そのため Store 経由でも `err.body` を参照できます。
 
 ```js
 WebC.Lib.request({ url: '/api/users', params: { q: 'a' } })
   .then((users) => console.log(users))
   .catch((e) => console.error(e.status, e.message));
+```
+
+サーバがエラー時に JSON（例: `{ "message": "3行目: 日付が不正です", "line": 3 }`）を返す場合、`body` から取り出して画面に表示できます。`body` が文字列の場合（JSON 以外が返ったとき）も考慮しています。
+
+```js
+WebC.Lib.request({ url: '/api/import', method: 'POST', params: { text } })
+  .catch((e) => {
+    if (e.status === undefined) throw e; // 通信自体の失敗
+    const msg = typeof e.body === 'object' && e.body ? e.body.message : e.message;
+    document.querySelector('#error').textContent = msg;
+  });
 ```
 
 ## Lib.getValues(form)

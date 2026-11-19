@@ -19,7 +19,8 @@
      * - それ以外: contentType 'json' なら JSON.stringify、'form' なら URLSearchParams を body に
      * - headers は defaults.headers と request 指定をマージ（request 優先）
      * - responseType: 'json' → JSON / 'text' → 文字列 / 'xml' → Document
-     * - HTTP 2xx 以外は Error（status プロパティ付き）で reject
+     * - HTTP 2xx 以外は Error（status・body プロパティ付き）で reject
+     *   body は responseType に合わせて読んだ本文（json で読めなければ文字列）
      *
      * @param {{ url: string, method?: string, params?: object, headers?: object,
      *           contentType?: 'json'|'form', responseType?: 'json'|'text'|'xml' }} options
@@ -41,7 +42,16 @@
         init.body = new URLSearchParams(params);
       }
       return global.fetch(target, init).then(async (res) => {
-        if (!res.ok) throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status });
+        if (!res.ok) {
+          const text = await res.text();
+          let body = text;
+          if (responseType === 'json') {
+            try { body = JSON.parse(text); } catch { /* JSON でなければ文字列のまま */ }
+          } else if (responseType === 'xml') {
+            body = new DOMParser().parseFromString(text, 'application/xml');
+          }
+          throw Object.assign(new Error(`HTTP ${res.status}`), { status: res.status, body });
+        }
         if (responseType === 'json') return res.json();
         const text = await res.text();
         return responseType === 'xml' ? new DOMParser().parseFromString(text, 'application/xml') : text;
